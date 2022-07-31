@@ -9,7 +9,7 @@
   export let stock;
   export let addOrRemove;
 
-const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher();
 </script>
 
 <article>
@@ -36,7 +36,7 @@ const dispatch = createEventDispatcher()
   article {
     display: flex;
     flex-direction: column;
-justify-content: space-between;
+    justify-content: space-between;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     border-radius: 5px;
     background: white;
@@ -80,5 +80,4 @@ justify-content: space-between;
   div {
     text-align: right;
   }
-
 </style>

@@ -1,8 +1,9 @@
 <script>
   import { onMount } from "svelte";
+  import { cart } from "../stores/store.js";
   import { io } from "socket.io-client";
   import BooksItem from "../books/BooksItem.svelte";
-  import { cart } from "../stores/store.js";
+ 
 
   const socket = io();
 
