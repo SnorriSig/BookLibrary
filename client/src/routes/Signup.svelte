@@ -28,9 +28,8 @@
 
     const data = await response.json();
     if (response.status === 201) {
-      isLoggedIn.set(false); //////// relevant??????
+      isLoggedIn.set(true);
       $user = data;
-      console.log("this", $user);
       navigate("/books", { replace: true });
     }
   }
@@ -80,17 +79,9 @@
   </form>
   <div name="footer">
     <Button type="button" on:click={handleSubmit}>Sign Up</Button>
-    <Button type="button" on:click={cancel}>Cancel</Button>
+    <Button mode="outline" type="button" on:click={cancel}>Cancel</Button>
   </div>
 </Modal>
-
-<!-- <style>
-  .form {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-</style> -->
 
 <style>
   form {

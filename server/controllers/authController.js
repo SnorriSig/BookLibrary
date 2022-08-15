@@ -36,7 +36,7 @@ export const signup = async (req, res) => {
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
-    // passwordConfirm: req.body.passwordConfirm,
+    books: [],
   });
 
   createSendToken(newUser, 201, res);
@@ -61,13 +61,12 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = async (req, res) => {
-
   const token = req.cookies.jwt;
-  if(token) {
-    res.clearCookie("jwt")
-    res.send({message: "Logging out, see you later"})
+  if (token) {
+    res.clearCookie("jwt");
+    res.send({ message: "Logging out, see you later" });
   }
-}
+};
 
 // Function to protect rescources
 export const protect = async (req, res, next) => {
@@ -88,5 +87,6 @@ export const protect = async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+
   next();
 };

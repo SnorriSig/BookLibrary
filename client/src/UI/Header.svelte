@@ -1,41 +1,17 @@
 <script>
   import { Link } from "svelte-navigator";
-  import { onMount } from "svelte";
-  import { isLoggedIn, user } from "../stores/store";
+  import { user } from "../stores/store";
 
-  let login;
-  const name = $user.data.user.firstName
-
-  onMount(async () => {
-    isLoggedIn.subscribe((value) => {
-      login = value;
-    });
-    if (!login) {
-      const res = await fetch("http://localhost:3000/api/checktoken", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      if (res.status === 200) {
-        isLoggedIn.set(true);
-      }
-    }
-  });
+  const name = $user.data.user.firstName;
 </script>
 
 <header>
   <h1>sonLibrary</h1>
   <nav class="wrapper">
-    <!-- {#if login} -->
-      <Link to="/books" class="link">Books</Link>
-      <Link to="/cart" class="link">Cart</Link>
-      <Link to="/logout" class="link">Logout</Link>
-      <Link to="/returns" class="link">{name}</Link>
-    <!-- {:else}
-      <Link to="/login" class="link">Login</Link>
-      <Link to="/signup" class="link">Sign up</Link>
-      <Link to="/about" class="link">About</Link> -->
-    <!-- {/if} -->
+    <Link to="/books" class="link">Books</Link>
+    <Link to="/cart" class="link">Cart</Link>
+    <Link to="/logout" class="link">Logout</Link>
+    <Link to="/returns" class="link">{name}'s books</Link>
   </nav>
 </header>
 

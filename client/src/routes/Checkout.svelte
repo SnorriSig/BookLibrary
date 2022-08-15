@@ -4,7 +4,7 @@
 
   import Modal from "../UI/Modal.svelte";
   import Button from "../UI/Button.svelte";
-  import { isLoggedIn, user } from "../stores/store.js";
+  import { user } from "../stores/store.js";
 
   const navigate = useNavigate();
 
@@ -12,8 +12,6 @@
   let city = "";
   let zip = "";
   let phone = "";
-
-  console.log($cart);
 
   async function submitForm() {
     const userData = {
@@ -33,12 +31,10 @@
         Credentials: "include",
       },
     });
-    
+
     const data = await response.json();
     if (response.status === 200) {
       $user = data;
-      console.log(typeof($cart));
-      console.log("before",$cart);
       $cart = [];
       navigate("/returns", { replace: true });
     }
@@ -60,12 +56,7 @@
       placeholder="address"
     />
     <br />
-    <input
-      bind:value={city}
-      type="text"
-      name="city"
-      placeholder="city"
-    />
+    <input bind:value={city} type="text" name="city" placeholder="city" />
     <br />
     <input bind:value={zip} type="text" name="postal code" placeholder="2300" />
     <br />
@@ -76,7 +67,6 @@
       placeholder="phone number"
     />
     <br />
-
   </form>
   <div name="footer">
     <Button type="button" on:click={submitForm}>Sign Up</Button>
@@ -84,13 +74,6 @@
   </div>
 </Modal>
 
-<!-- <style>
-  .form {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-</style> -->
 <style>
   form {
     width: 100%;

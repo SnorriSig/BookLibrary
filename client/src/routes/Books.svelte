@@ -1,13 +1,18 @@
 <script>
   import { onMount } from "svelte";
-  import { cart } from "../stores/store.js";
+  import { getNotificationsContext } from "svelte-notifications";
   import { io } from "socket.io-client";
+
+  import { cart, user } from "../stores/store.js";
   import BooksItem from "../books/BooksItem.svelte";
- 
 
   const socket = io();
 
-  // socket.emit("bookListUpdate")
+  socket.on("bookListUpdate", () => {
+    fetchBooks();
+  });
+
+  const { addNotification } = getNotificationsContext();
 
   $: loadedBooks = [];
   const buttonLabel = "add to cart";
@@ -32,50 +37,54 @@
 
   onMount(fetchBooks);
 
-  socket.on("bookListBroadcast", fetchBooks);
-
   function addToCartHandler(book) {
+    let bookInStock = false;
     let bookIsDuplicated = false;
+    let userHasCopy = false;
     $cart.forEach((item) => {
       if (item._id === book._id) {
         bookIsDuplicated = true;
       }
     });
-    if (!bookIsDuplicated) {
-      $cart = [...$cart, book];
+    if (book.stock >= 1) {
+      bookInStock = true;
     }
-  }
-
-  function emithandler() {
-    socket.emit("bookListUpdate");
+    $user.data.user.books.forEach((b) => {
+      if (b._id === book._id) userHasCopy = true;
+    });
+    if (!bookIsDuplicated && bookInStock && !userHasCopy) {
+      $cart = [...$cart, book];
+      addNotification({
+        text: `${book.title} added to cart`,
+        position: "bottom-left",
+        type: "success",
+        removeAfter: 2500,
+      });
+    }
   }
 </script>
 
-
-
 <section class="books">
-  <button on:click={emithandler}>emit event</button>
   {#each loadedBooks as book (book._id)}
     <BooksItem
       id={book._id}
       author={book.author}
       title={book.title}
       imageUrl={book.image}
-      stock={book.stock}
+      stock={book.stock + " books available"}
       addOrRemove={buttonLabel}
       on:addOrRemove={addToCartHandler(book)}
     />
   {/each}
 </section>
 
-
 <style>
   .books {
-    text-align: center;
-    /* margin-top: 5; */
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    margin-top: 5rem;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    margin-top: 8rem;
   }
 </style>

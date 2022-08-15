@@ -1,7 +1,7 @@
 <script>
   import Button from "../UI/Button.svelte";
   import { useNavigate, useLocation } from "svelte-navigator";
-  import { isLoggedIn } from "../stores/store.js"
+  import { isLoggedIn } from "../stores/store.js";
 
   const navigate = useNavigate();
 
@@ -12,10 +12,9 @@
 
     const data = await response.json();
     if (response.status === 200) {
-        isLoggedIn.set(false);
-      
-    navigate("/", { replace: true });
-}
+      isLoggedIn.set(false);
+      navigate("/", { replace: true });
+    }
   }
 
   function cancel() {
@@ -26,7 +25,7 @@
 <div class="container">
   <h1>Would you like to logout?</h1>
   <Button type="button" on:click={logoutHandler}>Logout</Button>
-  <Button type="button" on:click={cancel}>Cancel</Button>
+  <Button mode="outline" type="button" on:click={cancel}>Cancel</Button>
 </div>
 
 <style>

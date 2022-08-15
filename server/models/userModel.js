@@ -11,18 +11,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Enter your last name."],
   },
-  address: {
-    type: String,
-  },
-  city: {
-    type: String,
-  },
-  zip: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
   books: {
     type: Object,
   },
@@ -53,7 +41,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.correctPassword = async function(
+userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {

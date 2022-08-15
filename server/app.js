@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import path, { parse } from "path";
+import path from "path";
 import cors from "cors";
 import mongoSanaitize from "express-mongo-sanitize";
 import cookieParser from "cookie-parser";
@@ -16,7 +16,8 @@ const server = http.createServer(app);
 
 const io = new Server(server);
 
-// Global Middlewares
+//// Global Middlewares ////
+
 // Cors security
 app.use(cors());
 
@@ -25,7 +26,7 @@ app.use("/api/", helmet());
 
 // Limit requests from same API
 const limiter = rateLimit({
-  max: 500,
+  max: 600,
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP, try again in 60 minutes",
 });
@@ -39,9 +40,6 @@ app.use(cookieParser());
 // Data sanitization agains NOSQL query injection
 app.use(mongoSanaitize());
 
-// Serving the frontend
-app.use(express.static(path.resolve("../client/public")));
-
 // Environmental
 dotenv.config({ path: "./config.env" });
 
@@ -52,13 +50,24 @@ app.use("/api", booksRouter);
 import usersRouter from "./routers/userRouter.js";
 app.use("/api", usersRouter);
 
+// Serving the frontend
+app.use("/public", express.static(path.resolve("../client/public")));
+
+app.get("*", function (req, res) {
+  const url = path.resolve(
+    import.meta.url.replace("file:///", ""),
+    "..",
+    "../client/public/index.html"
+  );
+  res.sendFile(url);
+});
+
 // Database connection
 const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
   process.env.DATABASE_PASSWORD
 );
 
-// .connect(process.env.DATABASE_LOCAL, {
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
@@ -73,8 +82,10 @@ server.listen(PORT, () => {
   console.log("Server is running on port", PORT);
 });
 
- io.on('connection', socket => {
-  socket.on('bookListUpdate', () => { io.emit('bookListBroadcast'); }); // listen to the event
+io.on("connection", (socket) => {
+  socket.on("bookListUpdate", (books) => {
+    io.sockets.emit("bookListUpdate", books);
+  }); // listen to the event
 });
 
 export default app;

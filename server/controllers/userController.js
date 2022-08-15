@@ -18,7 +18,6 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// User.findOne({ _id: req.params.id })
 export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -36,8 +35,6 @@ export const getUser = async (req, res) => {
     });
   }
 };
-
-
 
 export const updateUser = async (req, res) => {
   try {

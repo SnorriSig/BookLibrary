@@ -23,7 +23,7 @@
     <img src={imageUrl} alt={title} />
   </div>
   <div class="content">
-    <p>{stock} books available</p>
+    <p>{stock}</p>
   </div>
   <footer>
     <Button type="button" on:click={() => dispatch("addOrRemove", id)}>
@@ -52,13 +52,11 @@
 
   .image {
     width: 90%;
-    /* height: auto; */
   }
 
   .image img {
     width: 90%;
     height: 100%;
-    /* object-fit: cover; */
   }
 
   h1 {

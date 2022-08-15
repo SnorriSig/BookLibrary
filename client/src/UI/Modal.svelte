@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { fly, fade } from "svelte/transition";
-  import Button from "./Button.svelte";
 
   export let title;
 
